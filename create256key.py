@@ -1,4 +1,5 @@
-import rsa
-with open('key5120.pem', mode='rb') as privatefile:
-    keydata = privatefile.read()
-privkey = rsa.PrivateKey.load_pkcs1(keydata)
+import os
+
+for i in range(1000000):
+    keyString = "key256_"+str(i)+".pem"
+    os.system("openssl genrsa -out "+keyString+" 256")
