@@ -66,8 +66,6 @@ def compareKeysWithArrays(bits):
     elif(result > 0):
         print("There are " + str(result) +
               " equivalent RSA-"+str(bits) + " key pairs")
-    else:
-        print("Result =", result)
     resultFile.close()
 
 
@@ -98,8 +96,6 @@ def compareKeys(bits, keysNum):
     elif(result > 0):
         print("There are " + str(result) +
               " equivalent RSA-"+str(bits) + " key pairs")
-    else:
-        print("Result =", result)
 
 
 create512Key(1000000)
