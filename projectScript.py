@@ -1,5 +1,8 @@
 import os
 
+privateKeys = []
+publicKeys = []
+
 
 def keyString(bits, index):
     if(bits == 512):
@@ -29,6 +32,45 @@ def create512Key(keysNum):
         print("Key 512 n° " + str(i) + " created")
 
 
+def addToArray(keyString, keyStringPub):
+    privateKeys.append(openKey(keyString))
+    publicKeys.append(openKey(keyStringPub))
+
+
+def loopKeys():
+    for i in range(1000000):
+        addToArray(keyString(512, i), (keyStringPub(512, i)))
+        print("Pem n°"+str(i))
+
+
+def compareKeysWithArrays(bits):
+    resultFile = open("result.txt", "x")
+    result = 0
+    arrayLen = len(privateKeys)
+    for i in range(arrayLen):
+        if(i == arrayLen):
+            break
+        len = range(i + 1, arrayLen)
+        for y in range(len):
+            if((privateKeys[i] == privateKeys[y]) and (publicKeys[i] == publicKeys[y])):
+                result += 1
+                resultFile.write("We are at key pair n°"+i+" and we have " +
+                                 str(result)+" equivalent RSA-"+str(bits) + " key pairs")
+            print("Key pairs 512 n° " + str(i) + " compared to n° " + str(y))
+
+    if(result == 0):
+        print("No equivalent among RSA-"+str(bits) + " key pairs")
+    elif(result == 1):
+        print("There is " + str(result) + " " + str(bits) +
+              " equivalent RSA-"+str(bits) + " key pairs")
+    elif(result > 0):
+        print("There are " + str(result) +
+              " equivalent RSA-"+str(bits) + " key pairs")
+    else:
+        print("Result =", result)
+    resultFile.close()
+
+
 def compareKeys(bits, keysNum):
     result = 0
     for i in range(keysNum):
@@ -56,6 +98,8 @@ def compareKeys(bits, keysNum):
     elif(result > 0):
         print("There are " + str(result) +
               " equivalent RSA-"+str(bits) + " key pairs")
+    else:
+        print("Result =", result)
 
 
 create512Key(1000000)
