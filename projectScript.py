@@ -25,16 +25,13 @@ def openKey(keyString):
 def create512Key(keysNum):
     for i in range(keysNum):
         key = keyString(512, i)
-        #keyPub = keyStringPub(512, i)
         os.system("openssl genrsa -out "+key+" 512")
         addToArray(key)
-        #os.system("openssl rsa -in "+key+" -pubout -out "+keyPub)
         print("Key 512 n° " + str(i) + " created")
 
 
-def addToArray(keyString, keyStringPub):
+def addToArray(keyString):
     privateKeys.append(openKey(keyString))
-    #publicKeys.append(openKey(keyStringPub))
 
 
 def loopKeys():
@@ -44,7 +41,6 @@ def loopKeys():
 
 
 def compareKeysWithArrays(bits):
-    #loopKeys()
     st = time.perf_counter()
     resultFile = open("result.txt", "x")
     result = 0
@@ -101,6 +97,5 @@ def compareKeys(bits, keysNum):
               " equivalent RSA-"+str(bits) + " key pairs")
 
 
-create512Key(1000000)
+create512Key(1000001)
 compareKeysWithArrays(512)
-#compareKeys(512, 1000000)
