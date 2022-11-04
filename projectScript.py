@@ -37,8 +37,8 @@ def loopKeys():
 
 def compareKeysWithArrays(bits, privateKeys):
     st = time.perf_counter()
-    resultFile = open("result_"+str(bits)+".txt", "x")
-    sameKeysFile = open("sameKeys_"+str(bits)+".txt", "x")
+    resultFile = open("result_"+str(bits)+".txt", "a")
+    sameKeysFile = open("sameKeys_"+str(bits)+".txt", "a")
     result = 0
     for i in range(len(privateKeys)):
         if (i == len(privateKeys)):
@@ -49,9 +49,9 @@ def compareKeysWithArrays(bits, privateKeys):
             if (privateKeys[i] == privateKeys[y]):
                 result += 1
                 resultFile.write("We are at key pair n°"+str(i)+" and we have " +
-                                 str(result)+" equivalent RSA-"+str(bits)+" keys.")
-                sameKeysFile.write(i)
-                sameKeysFile.write(y)
+                                 str(result)+" equivalent RSA-"+str(bits)+" keys. \n")
+                sameKeysFile.write(str(i)+"\n")
+                sameKeysFile.write(str(y)+"\n")
             print("Key pairs 512 n° " + str(i) + " compared to n° " + str(y))
     if (result == 0):
         print("No equivalent among RSA-"+str(bits) + " key pairs")
