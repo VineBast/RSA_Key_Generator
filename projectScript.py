@@ -1,20 +1,15 @@
 import os
 import time
 
-privateKeys = []
+privateKeys_256 = []
+privateKeys_512 = []
+
 
 def keyString(bits, index):
-    if(bits == 512):
+    if (bits == 512):
         return "key512_"+str(index)+".pem"
-    if(bits == 256):
+    if (bits == 256):
         return "key256_"+str(index)+".pem"
-
-
-def keyStringPub(bits, index):
-    if(bits == 512):
-        return "key512_"+str(index)+"_pub.pem"
-    if(bits == 256):
-        return "key256_"+str(index)+"_pub.pem"
 
 
 def openKey(keyString):
@@ -22,15 +17,15 @@ def openKey(keyString):
         return pem.read()
 
 
-def create512Key(keysNum):
+def createKeys(keysNum, bits, privateKeys):
     for i in range(keysNum):
-        key = keyString(512, i)
-        os.system("openssl genrsa -out "+key+" 512")
-        addToArray(key)
-        print("Key 512 n° " + str(i) + " created")
+        key = keyString(bits, i)
+        os.system("openssl genrsa -out "+key+" "+str(bits))
+        addToArray(key, privateKeys)
+        print("Key "+str(bits)+" n° " + str(i) + " created")
 
 
-def addToArray(keyString):
+def addToArray(keyString, privateKeys):
     privateKeys.append(openKey(keyString))
 
 
@@ -40,27 +35,30 @@ def loopKeys():
         print("Pem n°"+str(i))
 
 
-def compareKeysWithArrays(bits):
+def compareKeysWithArrays(bits, privateKeys):
     st = time.perf_counter()
-    resultFile = open("result.txt", "x")
+    resultFile = open("result_"+str(bits)+".txt", "x")
+    sameKeys = open("sameKeys_"+str(bits)+".txt", "x")
     result = 0
     for i in range(len(privateKeys)):
-        if(i == len(privateKeys)):
+        if (i == len(privateKeys)):
             break
         z = i + 1
         lenArray = range(z, len(privateKeys))
         for y in lenArray:
-            if(privateKeys[i] == privateKeys[y]):
+            if (privateKeys[i] == privateKeys[y]):
                 result += 1
                 resultFile.write("We are at key pair n°"+str(i)+" and we have " +
-                                 str(result)+" equivalent RSA-"+str(bits))
+                                 str(result)+" equivalent RSA-"+str(bits)+" keys.")
+                sameKeys.write(i)
+                sameKeys.write(y)
             print("Key pairs 512 n° " + str(i) + " compared to n° " + str(y))
-    if(result == 0):
+    if (result == 0):
         print("No equivalent among RSA-"+str(bits) + " key pairs")
-    elif(result == 1):
+    elif (result == 1):
         print("There is " + str(result) + " " + str(bits) +
               " equivalent RSA-"+str(bits) + " key pairs")
-    elif(result > 0):
+    elif (result > 0):
         print("There are " + str(result) +
               " equivalent RSA-"+str(bits) + " key pairs")
     resultFile.close()
@@ -68,34 +66,9 @@ def compareKeysWithArrays(bits):
     print("Time sec =", end - st)
 
 
-def compareKeys(bits, keysNum):
-    result = 0
-    for i in range(keysNum):
-        key = keyString(bits, i)
-        pemToCompare = openKey(key)
-        keyPub = keyStringPub(bits, i)
-        pemPubToCompare = openKey(keyPub)
-        y = i + 1
-        for y in range(keysNum):
-            if(i == y):
-                break
-            key = keyString(bits, y)
-            keyPub = keyStringPub(bits, y)
-            tempPem = openKey(key)
-            tempPemPub = open(keyPub)
-            if((pemToCompare == tempPem) and (pemPubToCompare == tempPemPub)):
-                result += 2
-            print("Key pairs 512 n° " + str(i) + " compared to n° " + str(y))
-
-    if(result == 0):
-        print("No equivalent among RSA-"+str(bits) + " key pairs")
-    elif(result == 1):
-        print("There is " + str(result) + " " + str(bits) +
-              " equivalent RSA-"+str(bits) + " key pairs")
-    elif(result > 0):
-        print("There are " + str(result) +
-              " equivalent RSA-"+str(bits) + " key pairs")
-
-
-create512Key(1000001)
-compareKeysWithArrays(512)
+# Lance la création des clés de 256 bits et les compare :
+createKeys(2, 256, privateKeys_256)
+compareKeysWithArrays(256, privateKeys_256)
+# Lance la création des clés de 512 bits et les compare :
+createKeys(2, 512, privateKeys_512)
+compareKeysWithArrays(512, privateKeys_512)
