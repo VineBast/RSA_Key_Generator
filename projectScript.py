@@ -67,8 +67,8 @@ def compareKeysWithArrays(bits, privateKeys):
 
 
 # Lance la création des clés de 256 bits et les compare :
-createKeys(2, 256, privateKeys_256)
+createKeys(1000001, 256, privateKeys_256)
 compareKeysWithArrays(256, privateKeys_256)
 # Lance la création des clés de 512 bits et les compare :
-createKeys(2, 512, privateKeys_512)
+createKeys(1000001, 512, privateKeys_512)
 compareKeysWithArrays(512, privateKeys_512)
