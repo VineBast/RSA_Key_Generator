@@ -77,7 +77,7 @@ def compareKeys(privateKeysArray, bits):
     resultUniqKeys = "Finale number of unique keys_" + str(bits)+" : "+str(len(uniqKeys))
     resultFile.write(resultUniqKeys)
     resultFile.write("\n")
-    resultDupKeys = "Number of duplicate keys" + str(bits)+" : " + str(len(privateKeysArray) - len(uniqKeys))
+    resultDupKeys = "Number of duplicate keys_" + str(bits)+" : " + str(len(privateKeysArray) - len(uniqKeys))
     resultFile.write(resultDupKeys)
     resultFile.write("\n")
     resultFile.close()
