@@ -58,21 +58,32 @@ def loopKeys(nb, array, bits):
 # https://stackoverflow.com/questions/9835762/how-do-i-find-the-duplicates-in-a-list-and-create-another-list-with-them
 # Ajoute les nouvelles clés dans un objet (Pourquoi un objet ? Pour la rapidité des loops sur un objet).
 # Donc : si cette clé n'est pas dans l'objet, on l'ajoute dans l'objet et  dans le tableau, sinon, on l'ajoute pas.
-# La fonction print le nombre de clés au départ puis le nombre de clé sans doublon,
-# puis le nombre de doublons :
+# La fonction écrit dans un fichier .txt (result_256.txt et result_512.txt) le nombre de clés au départ puis le nombre de clé sans doublon,
+# puis le nombre de doublons. 
+# Puis print les fichiers txt (les résultat sont donc aussi consultable avec un "cat result_256.txt" ou "result_512.txt") :
 
 
 def compareKeys(privateKeysArray, bits):
-    print("Starting number of keys_"+str(bits)+" :", len(privateKeysArray))
+    resultFile = (open("result_"+str(bits)+".txt", "a"))
+    startingNbKeys = "Starting number of keys_" + str(bits)+" : " + str(len(privateKeysArray))
+    resultFile.write(startingNbKeys)
+    resultFile.write("\n")
     seenKeys = set()
     uniqKeys = []
     for key in privateKeysArray:
         if key not in seenKeys:
             uniqKeys.append(key)
             seenKeys.add(key)
-    print("Finale number of unique keys_"+str(bits)+" :", len(uniqKeys))
-    print("Number of duplicate keys"+str(bits)+" : ",
-          len(privateKeysArray) - len(uniqKeys))
+    resultUniqKeys = "Finale number of unique keys_" + str(bits)+" : "+str(len(uniqKeys))
+    resultFile.write(resultUniqKeys)
+    resultFile.write("\n")
+    resultDupKeys = "Number of duplicate keys" + str(bits)+" : " + str(len(privateKeysArray) - len(uniqKeys))
+    resultFile.write(resultDupKeys)
+    resultFile.write("\n")
+    resultFile.close()
+    fileToRead = (open("result_"+str(bits)+".txt", "r"))
+    print(fileToRead.read())
+    fileToRead.close()
 
 
 # Lance la création des clés de 256 bits et les compare :
