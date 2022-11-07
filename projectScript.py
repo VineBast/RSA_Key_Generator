@@ -10,17 +10,17 @@ privateKeys_512 = []
 
 def keyString(bits, index):
     if (bits == 512):
-        return "key512_"+str(index)+".pem"
+        return "key512_"+str(index)+".rsa"
     if (bits == 256):
-        return "key256_"+str(index)+".pem"
+        return "key256_"+str(index)+".rsa"
 
 
 # Ouvre et renvoie la clé cible selon le nom formaté :
 
 
 def openKey(keyString):
-    with open(keyString, mode='r') as pem:
-        return pem.read()
+    with open(keyString, mode='r') as rsa:
+        return rsa.read()
 
 
 # Ajoute une clé (grâce aux fonctions keyString() et openKey())
@@ -51,7 +51,7 @@ def createKeys(keysNum, bits, privateKeysArray):
 def loopKeys(nb, array, bits):
     for i in range(nb):
         addToArray(keyString(bits, i), array)
-        print("Pem n°"+str(i))
+        print("Rsa n°"+str(i))
 
 
 # Cette fonction de comparaison est hautement inspirée de la source suivante :
@@ -92,3 +92,4 @@ compareKeys(privateKeys_256, 256)
 # Lance la création des clés de 512 bits et les compare :
 createKeys(1000001, 512, privateKeys_512)
 compareKeys(privateKeys_512, 512)
+
