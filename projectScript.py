@@ -1,3 +1,4 @@
+from batch_gcd import batch_gcd
 import os
 
 privateKeys_256 = []
@@ -23,12 +24,17 @@ def openKey(keyString):
         return rsa.read()
 
 
+
 # Ajoute une clé (grâce aux fonctions keyString() et openKey())
-# au tableau entré en paramètre :
+# au tableau entré en paramètre (et supprime les sauts de ligne + le début et la fin de la clé RSA) :
 
 
 def addToArray(keyString, privateKeysArray):
-    privateKeysArray.append(openKey(keyString))
+    key = openKey(keyString)
+    key = key.replace('-----BEGIN RSA PRIVATE KEY-----','')
+    key = key.replace('-----END RSA PRIVATE KEY-----','')
+    key = key.replace('\n','')
+    privateKeysArray.append(key)
 
 
 # Créé un nimbre de clés défini (keysNum), de la longueur de bits entrée en paramètre (bits)
@@ -48,9 +54,9 @@ def createKeys(keysNum, bits, privateKeysArray):
 # sur les clés créées et les ajouter à un tableau :
 
 
-def loopKeys(nb, array, bits):
+def loopKeys(nb, privateKeysArray, bits):
     for i in range(nb):
-        addToArray(keyString(bits, i), array)
+        addToArray(keyString(bits, i), privateKeysArray)
         print("Rsa n°"+str(i))
 
 
@@ -85,11 +91,13 @@ def compareKeys(privateKeysArray, bits):
     print(fileToRead.read())
     fileToRead.close()
 
+def batchGCD(privateKeysArray):
+    batch_gcd(privateKeysArray)
+
 
 # Lance la création des clés de 256 bits et les compare :
-createKeys(1000001, 256, privateKeys_256)
-compareKeys(privateKeys_256, 256)
+#createKeys(1000001, 256, privateKeys_256)
+#compareKeys(privateKeys_256, 256)
 # Lance la création des clés de 512 bits et les compare :
 createKeys(1000001, 512, privateKeys_512)
 compareKeys(privateKeys_512, 512)
-
