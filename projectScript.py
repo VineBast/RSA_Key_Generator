@@ -41,11 +41,16 @@ def createKeys(keysNum, bits, privateKeysArray):
         os.system("openssl genrsa -out "+key+" "+str(bits))
         addToArray(key, privateKeysArray)
         print("Key "+str(bits)+" n° " + str(i) + " created")
+        
+
+# Permet de relancer l'ajout des clés, n'est pas utilisé dans le script ici,
+# mais est utile en cas de crash de VM pour relancer la comparaison en faisant un loop
+# sur les clés créées et les ajouter à un tableau :
 
 
-def loopKeys(nb, array):
+def loopKeys(nb, array, bits):
     for i in range(nb):
-        addToArray(keyString(512, i), array)
+        addToArray(keyString(bits, i), array)
         print("Pem n°"+str(i))
 
 
@@ -53,29 +58,26 @@ def loopKeys(nb, array):
 # https://stackoverflow.com/questions/9835762/how-do-i-find-the-duplicates-in-a-list-and-create-another-list-with-them
 # Ajoute les nouvelles clés dans un objet (Pourquoi un objet ? Pour la rapidité des loops sur un objet).
 # Donc : si cette clé n'est pas dans l'objet, on l'ajoute dans l'objet et  dans le tableau, sinon, on l'ajoute pas.
-# La fonction print le nombre de clé du départ puis le nombre de clé sans doublon, puis le nombre de doublons,
-# et ajoute ces résultats dans un fichier result_256.txt ou result_512.txt :
+# La fonction print le nombre de clés au départ puis le nombre de clé sans doublon,
+# puis le nombre de doublons :
 
 
 def compareKeys(privateKeysArray, bits):
     print("Starting len keys_"+str(bits)+" :", len(privateKeysArray))
-    resultFile = open("result_"+str(bits)+".txt", "a")
     seenKeys = set()
     uniqKeys = []
     for key in privateKeysArray:
         if key not in seenKeys:
             uniqKeys.append(key)
             seenKeys.add(key)
-    resultFile.write("Finale len keys :")
-    resultFile.write(str(len(seenKeys)))
-    print("Finale len keys :", len(seenKeys))
-    print("Number of duplicate keys : ", len(privateKeysArray) - len(uniqKeys))
+    print("Finale number of unique keys_"+str(bits)+" :", len(uniqKeys))
+    print("Number of duplicate keys"+str(bits)+" : ",
+          len(privateKeysArray) - len(uniqKeys))
 
 
 # Lance la création des clés de 256 bits et les compare :
-#createKeys(1000001, 256, privateKeys_256)
-#compareKeys(privateKeys_256, 256)
-#compareKeysWithArrays(256, privateKeys_256)
+createKeys(1000001, 256, privateKeys_256)
+compareKeys(privateKeys_256, 256)
 # Lance la création des clés de 512 bits et les compare :
-#createKeys(1000001, 512, privateKeys_512)
-#compareKeys(privateKeys_256, 256)
+createKeys(1000001, 512, privateKeys_512)
+compareKeys(privateKeys_512, 512)
