@@ -41,7 +41,7 @@ def createKeys(keysNum, bits, privateKeysArray):
         os.system("openssl genrsa -out "+key+" "+str(bits))
         addToArray(key, privateKeysArray)
         print("Key "+str(bits)+" n° " + str(i) + " created")
-        
+
 
 # Permet de relancer l'ajout des clés, n'est pas utilisé dans le script ici,
 # mais est utile en cas de crash de VM pour relancer la comparaison en faisant un loop
@@ -63,7 +63,7 @@ def loopKeys(nb, array, bits):
 
 
 def compareKeys(privateKeysArray, bits):
-    print("Starting len keys_"+str(bits)+" :", len(privateKeysArray))
+    print("Starting number of keys_"+str(bits)+" :", len(privateKeysArray))
     seenKeys = set()
     uniqKeys = []
     for key in privateKeysArray:
